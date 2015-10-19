@@ -46,9 +46,8 @@ def scrape_term(term, source)
     next if who.count.zero?
     raise "Bad name in #{tr} col #{headers['député']}" unless who.count == 1
 
-    group = tds[ headers['groupe'] ].css('a') 
-    next if group.count.zero?
-    raise "Bad group in #{tr} col #{headers['groupe']}" unless group.count == 1
+    group_col = tds[ headers['groupe'] ]
+    group = group_col.at_css('a') || group_col
 
     data = { 
       name: who.text.tidy,
@@ -56,11 +55,11 @@ def scrape_term(term, source)
       wikiname: wikiname_from(who.first),
       area: tds[ headers['circonscription'] ].text.tidy,
       faction: group.text.tidy,
-      faction_wikiname: wikiname_from(group.first),
+      faction_wikiname: wikiname_from(group),
       term: term,
       source: source.to_s,
     }
-    # puts data
+    # puts data
     total += 1
     ScraperWiki.save_sqlite([:name, :area, :faction, :term], data)
   end
@@ -68,9 +67,9 @@ def scrape_term(term, source)
 end
 
 terms = {
-  14 => 'Liste_des_députés_de_la_XIVe_législature_de_la_Cinquième_République'
+  14 => 'Liste_des_députés_de_la_XIVe_législature_de_la_Cinquième_République',
   13 => 'Liste_des_députés_de_la_XIIIe_législature_de_la_Cinquième_République',
-  12 => 'Liste_des_députés_de_la_XIIe_législature_de_la_Cinquième_République'
+  12 => 'Liste_des_députés_de_la_XIIe_législature_de_la_Cinquième_République',
   11 => 'Liste_des_députés_de_la_XIe_législature_de_la_Cinquième_République',
   10 => 'Liste_des_députés_de_la_Xe_législature_de_la_Cinquième_République',
   9 => 'Liste_des_députés_de_la_IXe_législature_de_la_Cinquième_République',
