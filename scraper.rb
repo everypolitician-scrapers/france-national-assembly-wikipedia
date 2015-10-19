@@ -33,7 +33,7 @@ def scrape_term(term, source)
   rows.each do |tr|
     headings = tr.parent.xpath('tr[th]//th').map(&:text).map(&:downcase)
     unless (extras = headings - ok_headers).size.zero?
-      warn "Skipping due to #{extras}" 
+      # warn "Skipping due to #{extras}" 
       next
     end
     headers = Hash[headings.zip(0 .. headings.size)]
@@ -70,6 +70,18 @@ end
 terms = {
   14 => 'Liste_des_députés_de_la_XIVe_législature_de_la_Cinquième_République'
   13 => 'Liste_des_députés_de_la_XIIIe_législature_de_la_Cinquième_République',
+  12 => 'Liste_des_députés_de_la_XIIe_législature_de_la_Cinquième_République'
+  11 => 'Liste_des_députés_de_la_XIe_législature_de_la_Cinquième_République',
+  10 => 'Liste_des_députés_de_la_Xe_législature_de_la_Cinquième_République',
+  9 => 'Liste_des_députés_de_la_IXe_législature_de_la_Cinquième_République',
+  8 => 'Liste_des_députés_de_la_VIIIe_législature_de_la_Cinquième_République',
+  7 => 'Liste_des_députés_de_la_VIIe_législature_de_la_Cinquième_République',
+  6 => 'Liste_des_députés_de_la_VIe_législature_de_la_Cinquième_République',
+  5 => 'Liste_des_députés_de_la_Ve_législature_de_la_Cinquième_République',
+  4 => 'Liste_des_députés_de_la_IVe_législature_de_la_Cinquième_République',
+  3 => 'Liste_des_députés_de_la_IIIe_législature_de_la_Cinquième_République',
+  2 => 'Liste_des_députés_de_la_IIe_législature_de_la_Cinquième_République',
+  1 => 'Liste_des_députés_de_la_Ire_législature_de_la_Cinquième_République',
 }
 
 terms.each { |id, url| scrape_term(id, URI.join('https://fr.wikipedia.org/wiki/', URI.encode(url))) }
